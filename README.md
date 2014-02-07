@@ -12,5 +12,21 @@ when switching technologies.
 
 Right now we only support bluetooth (py-bluez) and zeroconf (using py-bonjour).
 But plugins are easy enough to write, and contributions are always welcome.
+The currently support plugins use:
+
+* pybonjour for zeroconf
+* pybluez for bluetooth
+
+If you want to implement your own plugin for a different library, for one of
+the already supported protocols keep the following in mind
+
+### Bluetooth
+
+* The EID is encoded as the service-id element
+
+
+### Zeroconf
+
+* The EID is encoded within the service TXT record
 
 
