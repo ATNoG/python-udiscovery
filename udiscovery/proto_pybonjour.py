@@ -136,12 +136,12 @@ class PyBonjourProtocol(BaseProtocol):
         result = []
         for srv in SERVICE_TABLE.values():
             if srv['uuid'] == uuid_id:
-                result.append(srv['host'])
+                result.append((srv['host'], srv['port']))
 
         return result
 
     @staticmethod
-    def entity2uuid(entity_id):
+    def entity2uuid(entity_loc):
         """
         Return all the UUIDs for the given hostname
         """
@@ -157,7 +157,6 @@ class PyBonjourProtocol(BaseProtocol):
         Enable discovery of our device via the given uuid
         """
         reg = DiscoveryAgent.UUID_SRV_TYPE
-        print(type(uuid_id), type(reg), port)
         sdref = pybonjour.DNSServiceRegister(name=str(uuid_id), regtype=reg, port=port, callBack=publish_cb)
 
         return { 'socket' : sdref, 'uuid' : uuid_id }
@@ -175,10 +174,11 @@ class PyBonjourProtocol(BaseProtocol):
 
         result = {}
         for srv in SERVICE_TABLE.values():
-            if not result.has_key(srv['host']):
-                result[srv['host']] = []
+            newsrv = (srv['host'], srv['port'])
+            if not result.has_key(newsrv):
+                result[newsrv] = []
 
-            result[srv['host']].append(srv['uuid'])
+            result[newsrv].append(srv['uuid'])
         return result
 
 
