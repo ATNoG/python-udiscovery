@@ -41,7 +41,7 @@ class PyBluezProtocol(BaseProtocol):
         return [ uuid.UUID(svc['service-id']) for svc in services if svc['service-id'] ]
 
     @staticmethod
-    def publish(uuid_id, channel=bluetoot.PORT_ANY):
+    def publish(uuid_id, channel=None):
         """
         Enable discovery of our bluetooth device via the given uuid
         """
@@ -49,6 +49,7 @@ class PyBluezProtocol(BaseProtocol):
         # * what do we do if the service is already published
         # * should we implement a service table with some locks?
 
+        channel = channel or bluetooth.PORT_ANY
         server_sock = bluetooth.BluetoothSocket( bluetooth.RFCOMM )
         server_sock.bind(("", port))
         server_sock.listen(1)

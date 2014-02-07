@@ -152,10 +152,11 @@ class PyBonjourProtocol(BaseProtocol):
         return result
 
     @staticmethod
-    def publish(uuid_id, port=6666):
+    def publish(uuid_id, port=None):
         """
         Enable discovery of our device via the given uuid
         """
+        port = port or 6666
         reg = DiscoveryAgent.UUID_SRV_TYPE
         sdref = pybonjour.DNSServiceRegister(name=str(uuid_id), regtype=reg, port=port, callBack=publish_cb)
 

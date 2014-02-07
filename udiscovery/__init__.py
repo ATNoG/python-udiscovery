@@ -62,7 +62,7 @@ def entity2loc(uuid_id, protocols=PROTOCOLS.keys()):
 
     return result
 
-def publish_entity(uuid_id, protocols=PROTOCOLS.keys()):
+def publish_entity(uuid_id, channel=None, protocols=PROTOCOLS.keys()):
     """Advertise our presence
 
     * key: public key that will be published
@@ -73,7 +73,7 @@ def publish_entity(uuid_id, protocols=PROTOCOLS.keys()):
 
     res = {}
     for proto in protocols:
-        res[proto] = PROTOCOLS[proto].publish(uuid_id)
+        res[proto] = PROTOCOLS[proto].publish(uuid_id, channel=channel)
 
     return res
 
