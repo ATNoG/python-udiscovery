@@ -27,7 +27,8 @@ class PyBluezProtocol(BaseProtocol):
         services = bluetooth.find_service(uuid=uuid_id.__str__())
         for svc in services:
             host = svc['host']
-            result.append(host)
+            port = port
+            result.append((host,port))
         return result
 
     @staticmethod
@@ -40,7 +41,7 @@ class PyBluezProtocol(BaseProtocol):
         return [ uuid.UUID(svc['service-id']) for svc in services if svc['service-id'] ]
 
     @staticmethod
-    def publish(uuid_id):
+    def publish(uuid_id, channel=bluetoot.PORT_ANY):
         """
         Enable discovery of our bluetooth device via the given uuid
         """
@@ -49,7 +50,7 @@ class PyBluezProtocol(BaseProtocol):
         # * should we implement a service table with some locks?
 
         server_sock = bluetooth.BluetoothSocket( bluetooth.RFCOMM )
-        server_sock.bind(("", bluetooth.PORT_ANY))
+        server_sock.bind(("", port))
         server_sock.listen(1)
         bluetooth.advertise_service( server_sock,
                                     'Unified UUID Discovery',
@@ -60,9 +61,9 @@ class PyBluezProtocol(BaseProtocol):
     @staticmethod
     def discover():
         """
-        Discover nearby bluetooth devices
+        Discover nearby bluetooth services
 
-        returns a dict mapping mac addresses to uuid objects
+        returns a dict mapping mac addresses/Port to uuid objects
         ie { <MAC addr> : [ uuid1, uuid2, ... ], ... }
         """
         result = {}
@@ -71,7 +72,7 @@ class PyBluezProtocol(BaseProtocol):
         services = [ svc for svc in services if svc['service-id'] ]
         for svc in services:
             if not result.has_key( svc['host'] ):
-                result[ svc['host'] ] = []
+                result[ (svc['host'], svc['port']) ] = []
 
             result[ svc['host'] ].append( uuid.UUID(svc['service-id']) )
 

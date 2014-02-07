@@ -28,7 +28,7 @@ class BaseProtocol(object):
         pass
     @staticmethod
     @abstractmethod
-    def publish(uuid_id):
+    def publish(uuid_id, channel=None):
         """
         Advertise uuid
 
