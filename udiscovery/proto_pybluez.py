@@ -71,8 +71,9 @@ class PyBluezProtocol(BaseProtocol):
         # services with no service-id don't matter
         services = [ svc for svc in services if svc['service-id'] ]
         for svc in services:
-            if not result.has_key( svc['host'] ):
-                result[ (svc['host'], svc['port']) ] = []
+            srv = (svc['host'],svc['port'])
+            if not result.has_key( srv ):
+                result[srv] = []
 
             result[ svc['host'] ].append( uuid.UUID(svc['service-id']) )
 
